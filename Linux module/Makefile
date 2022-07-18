@@ -1,4 +1,4 @@
-obj-m += tryButton.o
+obj-m += logo_module.o
 ksrc = /lib/modules/$(shell uname -r)/build
 PWD =$(shell pwd)
 all:
