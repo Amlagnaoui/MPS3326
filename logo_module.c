@@ -69,16 +69,6 @@ static void I2C_CurrentDimAll(u8 a)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
 static void delay(long long e){
 	int i;
 	for (i=0;i<e;i++){
@@ -90,26 +80,26 @@ static void delay(long long e){
 
 static void I2C_PWMDimAll(int pwmval)
 {
-  s32 PWM_LSB = 0, PWM_MSB = 0;
-  PWM_LSB = pwmval & 0x000F;
-  PWM_MSB = pwmval >> 4;
+  s32 PWM_L = 0, PWM_M = 0;
+  PWM_L = pwmval & 0x000F;
+  PWM_M = pwmval >> 4;
 
 
   for (i=0;i<16;i++)
   {
-		i2c_smbus_write_byte_data(LOGO_client,(0x0B +3*i),PWM_LSB);
-		i2c_smbus_write_byte_data(LOGO_client,(0x0C +3*i),PWM_MSB);
+		i2c_smbus_write_byte_data(LOGO_client,(0x0B +3*i),PWM_L);
+		i2c_smbus_write_byte_data(LOGO_client,(0x0C +3*i),PWM_M);
   }
 }
 
 static void I2C_PWMDimOne(int pwmval,int i)
 {
-s32 PWM_LSB = 0, PWM_MSB = 0;
-PWM_LSB = pwmval & 0x000F;
-PWM_MSB = pwmval >> 4;
+s32 PWM_L = 0, PWM_M = 0;
+PWM_L = pwmval & 0x000F;
+PWM_M = pwmval >> 4;
 
-i2c_smbus_write_byte_data(LOGO_client,(0x0B +3*i),PWM_LSB);
-i2c_smbus_write_byte_data(LOGO_client,(0x0C +3*i),PWM_MSB);
+i2c_smbus_write_byte_data(LOGO_client,(0x0B +3*i),PWM_L);
+i2c_smbus_write_byte_data(LOGO_client,(0x0C +3*i),PWM_M);
 }
 
 static void I2C_M1027_Setup(void)
@@ -126,9 +116,7 @@ static void I2C_M1027_Setup(void)
 
 /** @brief Write handler for the maxvalue sysfs attribute */
 static ssize_t logo_max_value_write(struct device *dev, struct device_attribute *attr, const char *buf, size_t count) {
-//    struct spi_device *spi = to_spi_device(dev);
-	struct i2c_client *client;
-    //struct my_sensor_data *data;
+    struct i2c_client *client;
     int size = 0;
 
     client = to_i2c_client(dev);
@@ -175,10 +163,7 @@ for(j=0;j<10;j++)
 		delay(100);
 		I2C_PWMDimAll(0);
 		printk("LOGO: Done \n");
-
-//   nrf905_spi_w_tx_address(spi, buf, count);
-//  Atribute has been called 
-	printk("LOGO: Write called !\n");
+		printk("LOGO: Write called !\n");
     return count;
 }
 
@@ -186,23 +171,10 @@ for(j=0;j<10;j++)
 static ssize_t logo_max_value_read(struct device *dev, struct device_attribute *attr, char *buf) {
 
 	struct i2c_client *client;
-    //struct my_sensor_data *data;
     int size = 0;
-
     client = to_i2c_client(dev);
 	printk("LOGO: Read called !\n");
 	int i,j;
-		/*for(j=0;j<3;j++)
-		{
-			for(i=0;i<200;i++)
-			{
-				I2C_PWMDimAll(i);
-			}
-			for(i=200;i>0;i--)
-			{
-				I2C_PWMDimAll(i);
-			}
-		}*/
 		
 		for(j=0;j<30;j++)
 		{
@@ -258,17 +230,6 @@ static struct attribute_group logo_attribute_group = {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
 //############################################################################################################################################################################################################
 //
 /*Declarations and what not*/ 
@@ -302,11 +263,6 @@ static int __init MyFirstModule_init (void)
 {
 	
 	int err;
-
-
-
-
-
 	//Lets call it init
     pr_info("Here I come !!!!!!!!!!!!!!!!!! \n");
 	u8 id;
@@ -319,9 +275,6 @@ static int __init MyFirstModule_init (void)
 		printk("LOGO: Device class can not be created!\n");
         goto ClassError;
 	}
-
-	
-
 	if(device_create(myClass, NULL, myDeviceNr, NULL, DRIVER_NAME) == NULL){
 		printk("LOGO: Device file cannot be created ! \n");
         goto FileError;
@@ -358,10 +311,8 @@ static int __init MyFirstModule_init (void)
 	printk("LOGO: LOGO Driver added succefully!\n");
 	
 	
-	//Lets call it main 
+	//Simple welcoming sequence with the LEDs 
 	
-	
-
         I2C_M1027_Setup();
         printk("LOGO: Everything setup \n");
 		printk("LOGO: Maximum value is %d \n",maxval);
@@ -429,8 +380,6 @@ static void __exit MyFirstModule_exit(void) {
 	sysfs_remove_group(&myDevice.kobj, &logo_attribute_group);
 	if (my_dev)
             root_device_unregister(my_dev);
-
-    //kfree(dev);
 	i2c_unregister_device(LOGO_client);
 	i2c_del_driver(&logo_driver);
 	cdev_del(&myDevice);
