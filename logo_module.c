@@ -124,19 +124,6 @@ static void I2C_M1027_Setup(void)
 
 //##############################################################################################################################################################################################################
 
-/** @brief device attribues (NOT USED FOR THE TIME BEING) */
-
-
-
-
-
-
-
-
-
-
-
-
 /** @brief Write handler for the maxvalue sysfs attribute */
 static ssize_t logo_max_value_write(struct device *dev, struct device_attribute *attr, const char *buf, size_t count) {
 //    struct spi_device *spi = to_spi_device(dev);
@@ -251,8 +238,10 @@ for(j=0;j<10;j++)
 
 
 /** @brief Device attribute for configuring the tx address */
-static DEVICE_ATTR(maxval, 0644, logo_max_value_read, logo_max_value_write);    //Eqivalent t declaring a struct of type device_attribute
+static DEVICE_ATTR(maxval, 0644, logo_max_value_read, logo_max_value_write);    //Equivalent to declaring a struct of type device_attribute
                                                                                 //dev_attr_maxval
+
+										//Encountered probs => Even when changing the access rights nothing, file cannot be opened
 
 
 
@@ -282,7 +271,7 @@ static struct attribute_group logo_attribute_group = {
 
 //############################################################################################################################################################################################################
 //
-/*Declarations n shit*/ 
+/*Declarations and what not*/ 
 
 
 /**
@@ -451,7 +440,9 @@ static void __exit MyFirstModule_exit(void) {
 	device_destroy(myClass, myDeviceNr);
 	class_unregister(myClass);
 	class_destroy(myClass);
-	unregister_chrdev_region(myDeviceNr, 1);
+	unregister_chrdev_region(myDeviceNr, 1);printk("LOGO: Destroy 3 called ! \n");
+	
+	printk("Exiting done ! \n");
 }
 
 MODULE_PARM_DESC(maxval,"Maximum Value");
