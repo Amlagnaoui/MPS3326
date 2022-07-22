@@ -399,7 +399,7 @@ static void __exit MyFirstModule_exit(void) {
 	printk("Exiting done ! \n");
 }
 
-MODULE_PARM_DESC(maxval,"Maximum Value");
+MODULE_PARM_DESC(maxval,"Maximum Value of the brightness sweep");
 module_param(maxval, int, 0);
 module_init(MyFirstModule_init);
 module_exit(MyFirstModule_exit);
