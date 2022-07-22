@@ -59,7 +59,7 @@ static dev_t myDeviceNr;
 static struct class *myClass;
 static struct cdev myDevice;
 
-static void I2C_CurrentDimAll(u8 a)
+static void I2C_CurrentDimAll(u8 a)		
 {
 	
 	//s32 *Value;
@@ -78,7 +78,7 @@ static void delay(long long e){
 
 
 
-static void I2C_PWMDimAll(int pwmval)
+static void I2C_PWMDimAll(int pwmval)		//Dimming all LEDs at once
 {
   s32 PWM_L = 0, PWM_M = 0;
   PWM_L = pwmval & 0x000F;
@@ -92,7 +92,7 @@ static void I2C_PWMDimAll(int pwmval)
   }
 }
 
-static void I2C_PWMDimOne(int pwmval,int i)
+static void I2C_PWMDimOne(int pwmval,int i)	//Dimming one LEDs Channel with i is (Channel number - 1)
 {
 s32 PWM_L = 0, PWM_M = 0;
 PWM_L = pwmval & 0x000F;
@@ -114,7 +114,12 @@ static void I2C_M1027_Setup(void)
 
 //##############################################################################################################################################################################################################
 
-/** @brief Write handler for the maxvalue sysfs attribute */
+/** @brief Write handler for the maxvalue sysfs attribute
+*
+* First use of attributes and trying to familiarize with them in full autonomy so excuse any school boy error that may be found and please address it if possible
+*
+*
+*/
 static ssize_t logo_max_value_write(struct device *dev, struct device_attribute *attr, const char *buf, size_t count) {
     struct i2c_client *client;
     int size = 0;
