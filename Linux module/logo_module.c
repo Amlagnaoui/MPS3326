@@ -29,7 +29,7 @@ static struct i2c_client * LOGO_client = NULL;
 
 #define I2C_BUS_AVAILABLE 	1
 #define SLAVE_DEVICE_NAME	"LOGO"
-#define LOGO_SLAVE_ADDRESS	0x30
+#define LOGO_SLAVE_ADDRESS	0x30		//Driver's address defined in Datasheet
 
 
 
